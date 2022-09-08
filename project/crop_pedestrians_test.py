@@ -135,6 +135,7 @@ for city in sorted(cities):
         
         f = open(bbox_name)
         bbox_file = json.load(f) # za učitati info iz bbox datoteke
+        f.close()
 
         obj_id = 0
         for obj in bbox_file['objects']:
