@@ -13,8 +13,8 @@ bbox_path = './gtBbox_cityPersons_trainval/gtBboxCityPersons/' + split
 im_path = './leftImg8bit_trainvaltest/leftImg8bit/' + split
 
 # za prave 256x256 i slike sa šumom jedna do druge
-im_out_path = './train/images_v2/' + split
-bbox_out_path = './train/bbox_v2/' + split
+im_out_path = './' + split + 'images_v2/'
+bbox_out_path = './' + split + 'bbox_v2/'
 
 # napravi folder u koji bude se spremalo
 if not os.path.exists(im_out_path):
@@ -23,14 +23,14 @@ if not os.path.exists(bbox_out_path):
     os.makedirs(bbox_out_path)
 
 # za prave 256x256 slike
-im_out_path_p = './train/images_real/' + split
+im_out_path_p = './' + split + 'images_real/'
 
 # napravi folder u koji bude se spremalo
 if not os.path.exists(im_out_path_p):
     os.makedirs(im_out_path_p)
 
 # za 256x256 slike sa šumom
-im_out_path_s = './train/images_noise/' + split
+im_out_path_s = './' + split + 'images_noise/'
 
 # napravi folder u koji bude se spremalo
 if not os.path.exists(im_out_path_s):
