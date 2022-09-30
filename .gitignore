@@ -1,1 +1,3 @@
 project/data
+project/__pycache__
+project/lightning_logs
