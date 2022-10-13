@@ -1,7 +1,7 @@
 import os, json
 from PIL import Image
 from torchvision import transforms
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, random_split
 import pytorch_lightning as pl
 
 class CityScapesDataset(Dataset):
@@ -31,10 +31,11 @@ class CityScapesDataset(Dataset):
         return len(self.real)
 
 class Cityscapes(pl.LightningDataModule):
-    def __init__(self, data_dir='./data/', batch_size=1):
+    def __init__(self, data_dir='./data/', batch_size=1, split=0.8):
         super().__init__()
         self.data_dir = data_dir
         self.batch_size = batch_size
+        self.split = split
         # ako je bez normalizacije
         # self.transform = transforms.ToTensor()
         self.transform = transforms.Compose([
@@ -44,13 +45,19 @@ class Cityscapes(pl.LightningDataModule):
 
     def setup(self, stage=None):
         if stage == 'fit' or stage is None:
-            self.train = CityScapesDataset(self.data_dir + 'train/', self.transform)
+            train_full = CityScapesDataset(self.data_dir + 'train/', self.transform)
+            train_size = int(self.split * len(train_full))
+            val_size = len(train_full) - train_size
+            self.train, self.val = random_split(train_full, [train_size, val_size])
         if stage == 'test' or stage is None:
             self.test = CityScapesDataset(self.data_dir + 'test/', self.transform)
         # u kodu nema validation
     
     def train_dataloader(self):
         return DataLoader(self.train, batch_size=self.batch_size)
+
+    def val_dataloader(self):
+        return DataLoader(self.val, batch_size=self.batch_size)
 
     def test_dataloader(self):
         return DataLoader(self.test, batch_size=self.batch_size)
